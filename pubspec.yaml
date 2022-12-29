@@ -1,0 +1,46 @@
+name: restoria
+description: Restoria Action RPG
+version: 1.0.0+1
+
+publish_to: 'none'
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  flame_audio: ^1.3.2
+  flame: ^1.4.0
+  bonfire: ^2.10.10
+  flutter_draggable_gridview: ^0.0.7
+  uuid: ^3.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
+    - assets/images/enemy/
+    - assets/images/hero/
+    - assets/images/hero/boris/
+    - assets/images/joystick/
+    - assets/images/items/
+    - assets/images/npc/
+    - assets/images/sfx/
+    - assets/images/tile/
+    - assets/images/ui/
+    - assets/audio/
+    - assets/audio/music/
+    - assets/audio/sfx/
+
+  fonts:
+    - family: Normal
+      fonts:
+        - asset: fonts/FutilePro.ttf
