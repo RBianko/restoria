@@ -32,13 +32,11 @@ flutter:
     - assets/images/hero/boris/
     - assets/images/joystick/
     - assets/images/items/
-    - assets/images/npc/
     - assets/images/sfx/
     - assets/images/tile/
     - assets/images/ui/
     - assets/audio/
     - assets/audio/music/
-    - assets/audio/sfx/
 
   fonts:
     - family: Normal

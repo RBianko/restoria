@@ -6,7 +6,7 @@ import 'package:restoria/src/objects/util/sprite/enemy_sprite.dart';
 
 import 'goblin_controller.dart';
 
-class Goblin extends SimpleEnemy with ObjectCollision, AutomaticRandomMovement, UseStateController<GoblinController> {
+class Goblin extends SimpleEnemy with ObjectCollision, AutomaticRandomMovement, UseStateController<GoblinController>, UseBarLife {
   Goblin(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
@@ -30,16 +30,6 @@ class Goblin extends SimpleEnemy with ObjectCollision, AutomaticRandomMovement, 
           ),
         ],
       ),
-    );
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    drawDefaultLifeBar(
-      canvas,
-      borderRadius: BorderRadius.circular(5),
-      borderWidth: 2,
     );
   }
 

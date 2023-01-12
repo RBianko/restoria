@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
 import 'package:restoria/src/objects/util/interface/bars/HP/bars_component.dart';
 import 'package:restoria/src/objects/util/interface/menus/hero_menu_controller.dart';
 
@@ -34,47 +33,5 @@ class PlayerHeroInterface extends GameInterface {
       },
     ));
     super.onMount();
-  }
-
-  void _showDialogTest(VoidCallback completed) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return Center(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('AwaitCallbackSceneAction'),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      completed();
-                    },
-                    child: const Text('CONTINUE'),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      gameRef.stopScene();
-                    },
-                    child: const Text('STOP SCENE'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }
