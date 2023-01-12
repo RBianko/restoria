@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:restoria/src/views/menu/menu.dart';
 
 class GameOver extends StatelessWidget {
-  const GameOver({Key? key}) : super(key: key);
+  const GameOver(this.startBgm, {Key? key}) : super(key: key);
+  final Function startBgm;
 
   @override
   Widget build(BuildContext context) {
+    startBgm('gameOver');
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

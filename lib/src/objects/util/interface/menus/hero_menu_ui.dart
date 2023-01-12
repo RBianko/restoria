@@ -55,7 +55,9 @@ class _HeroMenuState extends State<HeroMenu> {
                     child: Text(
                       '★' * slot.level,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.black45),
+                      style: TextStyle(
+                          color: skillsStarsColor[slot.level]
+                      ),
                     ),
                   ),
                 ),

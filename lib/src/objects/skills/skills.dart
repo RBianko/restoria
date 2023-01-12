@@ -68,9 +68,15 @@ Map<String, int> skillsTier = {
   SkillsId.hurricane: 1,
 };
 
+Map<int, Color> skillsStarsColor = {
+  1: Colors.black45,
+  2: Colors.yellowAccent,
+  3: Colors.red,
+};
+
 Map<String, SkillStat> skillsData = {
   SkillsId.fireball: SkillStat(
-      damage: 50,
+      damage: 25,
       interval: 950,
       icon: '',
       animation: CommonSpriteSheet.fireBallRight,
@@ -94,7 +100,7 @@ Map<String, SkillStat> skillsData = {
       size: 0.7,
       speed: 190),
   SkillsId.hurricane: SkillStat(
-      damage: 30,
+      damage: 16,
       interval: 660,
       icon: '',
       animation: CommonSpriteSheet.whiteAttackEffectRight,

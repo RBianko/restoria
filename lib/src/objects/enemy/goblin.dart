@@ -1,5 +1,5 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Colors, TextStyle;
 import 'package:restoria/src/objects/map/map.dart';
 import 'package:restoria/src/objects/util/sprite/common_sprite.dart';
 import 'package:restoria/src/objects/util/sprite/enemy_sprite.dart';

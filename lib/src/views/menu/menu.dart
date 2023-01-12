@@ -1,4 +1,3 @@
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:restoria/src/views/game/game.dart';
@@ -8,8 +7,6 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    startBgmMusic();
-
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
@@ -108,14 +105,5 @@ class Menu extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (context) => page),
     );
-  }
-}
-
-Future<void> startBgmMusic() async {
-  FlameAudio.bgm.initialize();
-  try {
-    // await FlameAudio.bgm.play('music/bg_music.mp3', volume: 0.1);
-  } on Exception catch (e) {
-    // TODO
   }
 }

@@ -39,11 +39,11 @@ class PlayerHero extends SimplePlayer with Lighting, ObjectCollision, UseStateCo
     setupCollision(
       CollisionConfig(
         collisions: [
-          CollisionArea.circle(
-            radius: MainMap.tileSize / 5,
+          CollisionArea.rectangle(
+            size: Vector2(width / 5.0, width / 5.0),
             align: Vector2(
-              MainMap.tileSize / 2.5,
-              MainMap.tileSize / 2.5,
+              width / 2.5,
+              width / 2.5,
             ),
           )
         ],
@@ -71,21 +71,6 @@ class PlayerHero extends SimplePlayer with Lighting, ObjectCollision, UseStateCo
     super.joystickAction(event);
   }
 
-  @override
-  void die() {
-    removeFromParent();
-    gameRef.overlayManager.add('GameOver');
-    gameRef.colorFilter?.animateTo(Colors.red.withOpacity(0.5));
-    gameRef.add(
-      GameDecoration.withSprite(
-        sprite: Sprite.load('hero/crypt.png'),
-        position: position,
-        size: Vector2.all(MainMap.tileSize),
-      ),
-    );
-    super.die();
-  }
-
   double getMouseAngle() {
     final Vector2 mouseVector = getMouseVector();
     final Vector2 fixedPosition = position + size / 2;
@@ -103,10 +88,6 @@ class PlayerHero extends SimplePlayer with Lighting, ObjectCollision, UseStateCo
   }
 
   void executeSkill(Skill skill) {
-    simpleAttackMelee(
-      damage: skill.skillStat.damage,
-      size: Vector2.all(MainMap.tileSize),
-    );
     simpleAttackRangeByAngle(
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
       animation: skill.skillStat.animation,
@@ -118,19 +99,19 @@ class PlayerHero extends SimplePlayer with Lighting, ObjectCollision, UseStateCo
       collision: CollisionConfig(
         enable: false,
         collisions: [
-          CollisionArea.circle(radius: width / 2, align: Vector2(width * 0.1, 0))
-          //     .rectangle(
-          //   size: Vector2(width / 4, width / 4),
-          //   align: Vector2(width * 0.1, 0),
-          // ),
+          CollisionArea.polygon(
+              points: [
+                Vector2(0, 30),
+                Vector2(5, 15),
+                Vector2(0, 0),
+                Vector2(15, 15),
+              ],
+              align: Vector2(width * 0.3, width * 0.1),
+          )
         ],
       ),
+      destroySize: Vector2(width / 12, width / 12),
       marginFromOrigin: 25,
-      lightingConfig: LightingConfig(
-        radius: width / 2,
-        blurBorder: width,
-        color: Colors.orange.withOpacity(0.3),
-      ),
     );
   }
 
@@ -206,5 +187,20 @@ class PlayerHero extends SimplePlayer with Lighting, ObjectCollision, UseStateCo
 
   void updateStamina(double stamina) {
     barLifeController?.stamina = stamina;
+  }
+
+  @override
+  void die() {
+    removeFromParent();
+    gameRef.overlayManager.add('GameOver');
+    gameRef.colorFilter?.animateTo(Colors.red.withOpacity(0.5));
+    gameRef.add(
+      GameDecoration.withSprite(
+        sprite: Sprite.load('hero/crypt.png'),
+        position: position,
+        size: Vector2.all(MainMap.tileSize),
+      ),
+    );
+    super.die();
   }
 }
