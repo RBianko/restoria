@@ -98,7 +98,7 @@ class _HeroMenuState extends State<HeroMenu> {
           return Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(7)),
-                border: Border.all(color: accepted.isEmpty ? Colors.transparent : Colors.grey, width: 2, strokeAlign: StrokeAlign.outside),
+                border: Border.all(color: accepted.isEmpty ? Colors.transparent : Colors.grey, width: 2, strokeAlign: BorderSide.strokeAlignOutside),
               ),
               child: child);
         });
