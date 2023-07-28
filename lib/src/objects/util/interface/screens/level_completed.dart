@@ -29,23 +29,23 @@ class LevelCompleted extends StatelessWidget {
                 width: 230,
                 height: 50,
                 child: ElevatedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => const Menu()),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: const Text(
-                      'Move to Shop',
-                      style: TextStyle(fontSize: 30),
-                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => const Menu()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  child: const Text(
+                    'Move to Shop',
+                    style: TextStyle(fontSize: 30),
+                  ),
                 ),
               ),
               SizedBox(width: 20),
@@ -63,7 +63,7 @@ class LevelCompleted extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => const Menu()),
-                          (Route<dynamic> route) => false,
+                      (Route<dynamic> route) => false,
                     );
                   },
                   child: const Text(

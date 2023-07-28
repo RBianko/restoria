@@ -33,7 +33,8 @@ class PlayerHeroController extends StateController<PlayerHero> {
 
   void handleJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN) {
-      if (event.id == LogicalKeyboardKey.space.keyId || event.id == HeroAttackType.attackMelee) {
+      if (event.id == LogicalKeyboardKey.space.keyId ||
+          event.id == HeroAttackType.attackMelee) {
         if (stamina > 15) {
           _decrementStamina(15);
           component?.execMeleeAttack(attack);
@@ -43,7 +44,8 @@ class PlayerHeroController extends StateController<PlayerHero> {
   }
 
   void _verifyStamina(double dt) {
-    if (stamina < 100 && component?.checkInterval('INCREMENT_STAMINA', 100, dt) == true) {
+    if (stamina < 100 &&
+        component?.checkInterval('INCREMENT_STAMINA', 100, dt) == true) {
       stamina += 2;
       if (stamina > 100) {
         stamina = 100;

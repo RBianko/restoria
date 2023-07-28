@@ -6,7 +6,12 @@ import 'package:restoria/src/objects/util/sprite/enemy_sprite.dart';
 
 import 'goblin_controller.dart';
 
-class Goblin extends SimpleEnemy with ObjectCollision, AutomaticRandomMovement, UseStateController<GoblinController>, UseBarLife {
+class Goblin extends SimpleEnemy
+    with
+        ObjectCollision,
+        AutomaticRandomMovement,
+        UseStateController<GoblinController>,
+        UseBarLife {
   Goblin(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,

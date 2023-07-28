@@ -1,17 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 
-///
-/// Created by
-///
-/// ─▄▀─▄▀
-/// ──▀──▀
-/// █▀▀▀▀▀█▄
-/// █░░░░░█─█
-/// ▀▄▄▄▄▄▀▀
-///
-/// Rafaelbarbosatec
-/// on 25/02/22
-
 class HeroMenuController extends StateController {
   bool _show = false;
   bool _isVisible = false;

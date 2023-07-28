@@ -43,7 +43,9 @@ class _HeroMenuState extends State<HeroMenu> {
   Widget build(BuildContext context) {
     /// SKILLS SLOT UI
     Widget slotContent(Skill slot) => Container(
-          decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: slot.iconBackground),
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              color: slot.iconBackground),
           child: Material(
             type: MaterialType.transparency,
             child: Stack(
@@ -55,9 +57,7 @@ class _HeroMenuState extends State<HeroMenu> {
                     child: Text(
                       '★' * slot.level,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: skillsStarsColor[slot.level]
-                      ),
+                      style: TextStyle(color: skillsStarsColor[slot.level]),
                     ),
                   ),
                 ),
@@ -68,7 +68,8 @@ class _HeroMenuState extends State<HeroMenu> {
                     child: Text(
                       slot.name,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 12, color: Colors.black45),
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.black45),
                     ),
                   ),
                 )
@@ -88,7 +89,8 @@ class _HeroMenuState extends State<HeroMenu> {
       });
     }
 
-    Widget wrapWithDragTarget(child, Skill slot) => DragTarget(onAccept: (Skill data) {
+    Widget wrapWithDragTarget(child, Skill slot) =>
+        DragTarget(onAccept: (Skill data) {
           moveSlots(data, slot);
         }, builder: (
           BuildContext context,
@@ -98,7 +100,10 @@ class _HeroMenuState extends State<HeroMenu> {
           return Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(7)),
-                border: Border.all(color: accepted.isEmpty ? Colors.transparent : Colors.grey, width: 2, strokeAlign: BorderSide.strokeAlignOutside),
+                border: Border.all(
+                    color: accepted.isEmpty ? Colors.transparent : Colors.grey,
+                    width: 2,
+                    strokeAlign: BorderSide.strokeAlignOutside),
               ),
               child: child);
         });
@@ -122,11 +127,13 @@ class _HeroMenuState extends State<HeroMenu> {
         }
       }
       for (int skillToEmpty in toEmpty) {
-        heroController.skills.replaceRange(skillToEmpty, skillToEmpty + 1, [Skill.none()]);
+        heroController.skills
+            .replaceRange(skillToEmpty, skillToEmpty + 1, [Skill.none()]);
       }
 
       setState(() {
-        heroController.skills[index] = (Skill(id: skill.id, level: min(3, ++skill.level)));
+        heroController.skills[index] =
+            (Skill(id: skill.id, level: min(3, ++skill.level)));
       });
     }
 
@@ -138,9 +145,12 @@ class _HeroMenuState extends State<HeroMenu> {
         if (skill.id == 'None') continue;
         int consequences = 1;
 
-        for (Skill otherSkill in heroController.skills.skip(heroController.skills.indexOf(skill) + 1)) {
+        for (Skill otherSkill in heroController.skills
+            .skip(heroController.skills.indexOf(skill) + 1)) {
           if (otherSkill.id == 'None') continue;
-          if (skill.level < 3 && skill.id == otherSkill.id && skill.level == otherSkill.level) consequences++;
+          if (skill.level < 3 &&
+              skill.id == otherSkill.id &&
+              skill.level == otherSkill.level) consequences++;
           if (consequences == 3) {
             index = heroController.skills.indexOf(skill);
             combineSkill = skill;
@@ -181,9 +191,14 @@ class _HeroMenuState extends State<HeroMenu> {
                         left: 10,
                         child: ElevatedButton(
                           onPressed: () => setState(() {
-                            Skill emptySlot = heroController.skills.firstWhere((slot) => slot.id == 'None');
-                            int emptySlotIndex = heroController.skills.indexOf(emptySlot);
-                            heroController.skills.replaceRange(emptySlotIndex, emptySlotIndex + 1, [Skill(id: SkillsId.fireball, level: 1)]);
+                            Skill emptySlot = heroController.skills
+                                .firstWhere((slot) => slot.id == 'None');
+                            int emptySlotIndex =
+                                heroController.skills.indexOf(emptySlot);
+                            heroController.skills.replaceRange(
+                                emptySlotIndex,
+                                emptySlotIndex + 1,
+                                [Skill(id: SkillsId.fireball, level: 1)]);
                           }),
                           child: Icon(Icons.add),
                         ),
@@ -193,9 +208,14 @@ class _HeroMenuState extends State<HeroMenu> {
                         left: 70,
                         child: ElevatedButton(
                           onPressed: () => setState(() {
-                            Skill emptySlot = heroController.skills.firstWhere((slot) => slot.id == 'None');
-                            int emptySlotIndex = heroController.skills.indexOf(emptySlot);
-                            heroController.skills.replaceRange(emptySlotIndex, emptySlotIndex + 1, [Skill(id: SkillsId.hurricane, level: 1)]);
+                            Skill emptySlot = heroController.skills
+                                .firstWhere((slot) => slot.id == 'None');
+                            int emptySlotIndex =
+                                heroController.skills.indexOf(emptySlot);
+                            heroController.skills.replaceRange(
+                                emptySlotIndex,
+                                emptySlotIndex + 1,
+                                [Skill(id: SkillsId.hurricane, level: 1)]);
                           }),
                           child: Icon(Icons.add),
                         ),
@@ -207,13 +227,23 @@ class _HeroMenuState extends State<HeroMenu> {
                           child: Wrap(
                             spacing: 27,
                             children: [
-                              ...heroController.skills.take(5).map((Skill slot) => buildDraggableSlot(slot)).toList(),
+                              ...heroController.skills
+                                  .take(5)
+                                  .map((Skill slot) => buildDraggableSlot(slot))
+                                  .toList(),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(15, 33, 15, 0),
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 33, 15, 0),
                                 child: Wrap(
                                   spacing: 17,
                                   runSpacing: 17,
-                                  children: [...heroController.skills.skip(5).map((Skill slot) => buildDraggableSlot(slot)).toList()],
+                                  children: [
+                                    ...heroController.skills
+                                        .skip(5)
+                                        .map((Skill slot) =>
+                                            buildDraggableSlot(slot))
+                                        .toList()
+                                  ],
                                 ),
                               )
                             ],

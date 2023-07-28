@@ -10,7 +10,8 @@ import 'player_hero_controller.dart';
 
 enum HeroAttackType { attackMelee, attackRanged }
 
-class PlayerHero extends SimplePlayer with Lighting, ObjectCollision, UseStateController<PlayerHeroController> {
+class PlayerHero extends SimplePlayer
+    with Lighting, ObjectCollision, UseStateController<PlayerHeroController> {
   static final double maxSpeed = MainMap.tileSize * 2.5;
 
   double angleRadAttack = 0.0;
@@ -100,13 +101,13 @@ class PlayerHero extends SimplePlayer with Lighting, ObjectCollision, UseStateCo
         enable: false,
         collisions: [
           CollisionArea.polygon(
-              points: [
-                Vector2(0, 30),
-                Vector2(5, 15),
-                Vector2(0, 0),
-                Vector2(15, 15),
-              ],
-              align: Vector2(width * 0.3, width * 0.1),
+            points: [
+              Vector2(0, 30),
+              Vector2(5, 15),
+              Vector2(0, 0),
+              Vector2(15, 15),
+            ],
+            align: Vector2(width * 0.3, width * 0.1),
           )
         ],
       ),
