@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'dart:math';
 
@@ -65,7 +66,19 @@ class _GameState extends State<Game> with GameListener {
                 gameController: _controller,
                 showCollisionArea: true, // DebugMode
                 focusNode: gameFocus,
-                joystick: Platform.isAndroid && Platform.isIOS
+                joystick: kIsWeb ? Joystick(
+                  keyboardConfig: KeyboardConfig(
+                    keyboardDirectionalType: KeyboardDirectionalType.wasd,
+                    acceptedKeys: [
+                      LogicalKeyboardKey.space,
+                      LogicalKeyboardKey.escape,
+                      LogicalKeyboardKey.tab,
+                      LogicalKeyboardKey.keyQ,
+                      LogicalKeyboardKey.keyE,
+                      LogicalKeyboardKey.keyR,
+                    ],
+                  ),
+                ) : Platform.isAndroid && Platform.isIOS
                     ? Joystick(
                         directional: JoystickDirectional(
                           spriteBackgroundDirectional: Sprite.load(
@@ -94,20 +107,19 @@ class _GameState extends State<Game> with GameListener {
                             margin: const EdgeInsets.only(bottom: 50, right: 160),
                           )
                         ],
-                      )
-                    : Joystick(
-                        keyboardConfig: KeyboardConfig(
-                          keyboardDirectionalType: KeyboardDirectionalType.wasd,
-                          acceptedKeys: [
-                            LogicalKeyboardKey.space,
-                            LogicalKeyboardKey.escape,
-                            LogicalKeyboardKey.tab,
-                            LogicalKeyboardKey.keyQ,
-                            LogicalKeyboardKey.keyE,
-                            LogicalKeyboardKey.keyR,
-                          ],
-                        ),
-                      ),
+                      ) : Joystick(
+                  keyboardConfig: KeyboardConfig(
+                    keyboardDirectionalType: KeyboardDirectionalType.wasd,
+                    acceptedKeys: [
+                      LogicalKeyboardKey.space,
+                      LogicalKeyboardKey.escape,
+                      LogicalKeyboardKey.tab,
+                      LogicalKeyboardKey.keyQ,
+                      LogicalKeyboardKey.keyE,
+                      LogicalKeyboardKey.keyR,
+                    ],
+                  ),
+                ),
                 player: PlayerHero(Vector2((8 * MainMap.tileSize), (5 * MainMap.tileSize)), getMouseVector),
                 interface: PlayerHeroInterface(),
                 map: WorldMapByTiled(
