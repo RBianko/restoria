@@ -4,7 +4,7 @@ version: 0.1.0+1
 
 publish_to: 'none'
 environment:
-  sdk: '>=2.18.2 <3.0.3'
+  sdk: '>=2.18.2 <=3.0.6'
 
 dependencies:
   flutter:
@@ -12,8 +12,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flame_audio: ^2.0.2
-  flame: ^1.4.0
-  bonfire: ^2.10.10
+  flame: ^1.7.3
+  bonfire: ^2.12.7
   flutter_draggable_gridview: ^0.0.7
   uuid: ^3.0.6
 
