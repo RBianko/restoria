@@ -33,8 +33,8 @@ class GameOver extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const Menu()),
-                    (Route<dynamic> route) => false,
+                    MaterialPageRoute(builder: (context) => const Menu(restart: true)),
+                        (Route<dynamic> route) => false,
                   );
                 },
                 child: const Text(

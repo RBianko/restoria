@@ -2,18 +2,6 @@ import 'package:bonfire/bonfire.dart';
 
 import 'bars_component.dart';
 
-///
-/// Created by
-///
-/// ─▄▀─▄▀
-/// ──▀──▀
-/// █▀▀▀▀▀█▄
-/// █░░░░░█─█
-/// ▀▄▄▄▄▄▀▀
-///
-/// Rafaelbarbosatec
-/// on 25/02/22
-
 class BarsController extends StateController<BarsComponent> {
   double _maxLife = 100;
   double _maxStamina = 100;

@@ -6,7 +6,6 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:restoria/src/objects/enemy/goblin.dart';
 import 'package:restoria/src/objects/map/map.dart';
 import 'package:restoria/src/objects/playerHero/player_hero.dart';
 import 'package:restoria/src/objects/playerHero/player_hero_interface.dart';
@@ -15,12 +14,14 @@ import 'package:restoria/src/objects/util/interface/menus/hero_menu_ui.dart';
 import 'package:restoria/src/objects/util/interface/screens/game_menu.dart';
 import 'package:restoria/src/objects/util/interface/screens/game_over.dart';
 import 'package:restoria/src/objects/util/interface/screens/level_completed.dart';
+import 'package:restoria/src/objects/util/providers/respawn_manager.dart';
 
 import '../../objects/playerHero/player_hero_controller.dart';
 import '../../objects/skills/skills.dart';
 
 class Game extends StatefulWidget {
-  const Game({Key? key}) : super(key: key);
+  final int level;
+  const Game({this.level = 1, Key? key}) : super(key: key);
 
   @override
   State<Game> createState() => _GameState();
@@ -28,12 +29,12 @@ class Game extends StatefulWidget {
 
 class _GameState extends State<Game> with GameListener {
   final GameController _controller = GameController();
-  int _level = 1;
-  int _enemiesCount = 0;
-  int _prevEnemiesCount = 0;
+  late int _level;
+  late int _gameHash;
 
   @override
   void initState() {
+    _level = widget.level;
     _controller.addListener(this);
     super.initState();
   }
@@ -145,7 +146,7 @@ class _GameState extends State<Game> with GameListener {
                 overlayBuilderMap: {
                   'Bars': (context, game) => const Bars(),
                   'GameOver': (context, game) => GameOver(startBgm),
-                  'GameMenu': (context, game) => const GameMenu(),
+                  'GameMenu': (context, game) => GameMenu(game),
                   'MiniMap': (context, game) => MiniMap(
                         game: game,
                         margin: const EdgeInsets.all(10),
@@ -158,7 +159,7 @@ class _GameState extends State<Game> with GameListener {
                       ),
                   'HeroMenu': (context, game) => const HeroMenu(),
                   'LevelCompleted': (context, game) =>
-                      LevelCompleted(startBgm, _level - 1),
+                      LevelCompleted(_level, startBgm),
                 },
                 initialActiveOverlays: const [
                   'Bars',
@@ -171,7 +172,7 @@ class _GameState extends State<Game> with GameListener {
                 ),
                 onReady: (BonfireGame game) async => await _onGameStart(
                     game, _controller, _level, heroController),
-                onDispose: () async => await _onGameOver(heroController),
+                onDispose: () async => await _onGameOver(heroController, _level),
               ),
             ),
           );
@@ -183,9 +184,7 @@ class _GameState extends State<Game> with GameListener {
   @override
   void changeCountLiveEnemies(int count) {
     print('changeCountLiveEnemies $count');
-    if (_prevEnemiesCount > count) _enemiesCount--;
-    _prevEnemiesCount = count;
-    if (_enemiesCount == 0) {
+    if (count == 0) {
       _onLevelCompleted();
     }
   }
@@ -193,41 +192,33 @@ class _GameState extends State<Game> with GameListener {
   @override
   void updateGame() {}
 
+  Future _onGameStart(BonfireGame game, GameController controller, int level,
+      PlayerHeroController heroController) async {
+    _gameHash = game.gameController!.gameRef.hashCode;
+    await startBgm('game');
+
+    print('---------------------------------------------------------');
+    print('_onGameStart: $_gameHash');
+    print('---------------------------------------------------------');
+
+    print('Creating RespawnManager for game: $_gameHash');
+    RespawnManager.game = game;
+    _onLevelStart();
+  }
+
+  void _onLevelStart() {
+    print('Level $_level Started!');
+    RespawnManager.spawnEnemiesForLevel(_level);
+  }
+
   void _onLevelCompleted() {
     _controller.gameRef.overlayManager.add('LevelCompleted');
     print('Level $_level Cleared!');
+
     _level++;
   }
 
-  Future _onGameStart(BonfireGame game, GameController controller, int level,
-      PlayerHeroController heroController) async {
-    print('_onGameStart: Level $level');
-    await startBgm('game');
-    double tile = MainMap.tileSize;
-    Vector2 randomVector() => Vector2(
-        Random().nextDouble() * (game.size.x - tile) + tile,
-        Random().nextDouble() * (game.size.y - tile) + tile);
-    SimpleEnemy goblin() => Goblin(randomVector());
-    final Map<int, List> enemies = {
-      1: [
-        goblin(),
-        goblin(),
-        goblin(),
-        goblin(),
-      ],
-      2: List.filled(8, goblin()),
-      3: List.filled(12, goblin()),
-    };
-
-    _enemiesCount = enemies[level]!.length;
-
-    for (SimpleEnemy enemy in enemies[level]!) {
-      await Future.delayed(const Duration(seconds: 1));
-      controller.addGameComponent(enemy);
-    }
-  }
-
-  _onGameOver(PlayerHeroController heroController) async {
+  _onGameOver(PlayerHeroController heroController, int level) async {
     heroController.skills = List.generate(15, (index) => Skill.none());
     print('_onGameOver');
     await startBgm('menu');
