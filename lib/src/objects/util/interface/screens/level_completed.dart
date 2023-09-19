@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:restoria/src/views/game/game.dart';
+import 'package:restoria/src/objects/util/providers/bgm_manager.dart';
 import 'package:restoria/src/views/menu/menu.dart';
 
 class LevelCompleted extends StatelessWidget {
-  final Function startBgm;
   final int level;
 
-  const LevelCompleted(this.level, this.startBgm, {Key? key}) : super(key: key);
+  const LevelCompleted(this.level, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    startBgm('levelCompleted');
+    SoundEffects.startBgm(BgmType.levelCompleted);
 
     return Center(
       child: ClipRRect(

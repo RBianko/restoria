@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +13,7 @@ import 'package:restoria/src/objects/util/interface/menus/hero_menu_ui.dart';
 import 'package:restoria/src/objects/util/interface/screens/game_menu.dart';
 import 'package:restoria/src/objects/util/interface/screens/game_over.dart';
 import 'package:restoria/src/objects/util/interface/screens/level_completed.dart';
+import 'package:restoria/src/objects/util/providers/bgm_manager.dart';
 import 'package:restoria/src/objects/util/providers/respawn_manager.dart';
 
 import '../../objects/playerHero/player_hero_controller.dart';
@@ -41,7 +41,6 @@ class _GameState extends State<Game> with GameListener {
 
   @override
   Widget build(BuildContext context) {
-    FlameAudio.bgm.initialize();
     Vector2 mouseVector = Vector2(0, 0);
     FocusNode gameFocus = FocusNode();
     PlayerHeroController heroController =
@@ -145,7 +144,7 @@ class _GameState extends State<Game> with GameListener {
                 ),
                 overlayBuilderMap: {
                   'Bars': (context, game) => const Bars(),
-                  'GameOver': (context, game) => GameOver(startBgm),
+                  'GameOver': (context, game) => const GameOver(),
                   'GameMenu': (context, game) => GameMenu(game),
                   'MiniMap': (context, game) => MiniMap(
                         game: game,
@@ -159,7 +158,7 @@ class _GameState extends State<Game> with GameListener {
                       ),
                   'HeroMenu': (context, game) => const HeroMenu(),
                   'LevelCompleted': (context, game) =>
-                      LevelCompleted(_level, startBgm),
+                      LevelCompleted(_level),
                 },
                 initialActiveOverlays: const [
                   'Bars',
@@ -172,7 +171,8 @@ class _GameState extends State<Game> with GameListener {
                 ),
                 onReady: (BonfireGame game) async => await _onGameStart(
                     game, _controller, _level, heroController),
-                onDispose: () async => await _onGameOver(heroController, _level),
+                onDispose: () async =>
+                    await _onGameOver(heroController, _level),
               ),
             ),
           );
@@ -195,7 +195,7 @@ class _GameState extends State<Game> with GameListener {
   Future _onGameStart(BonfireGame game, GameController controller, int level,
       PlayerHeroController heroController) async {
     _gameHash = game.gameController!.gameRef.hashCode;
-    await startBgm('game');
+    await SoundEffects.startBgm(BgmType.game);
 
     print('---------------------------------------------------------');
     print('_onGameStart: $_gameHash');
@@ -221,26 +221,5 @@ class _GameState extends State<Game> with GameListener {
   _onGameOver(PlayerHeroController heroController, int level) async {
     heroController.skills = List.generate(15, (index) => Skill.none());
     print('_onGameOver');
-    await startBgm('menu');
-  }
-
-  Future<void> startBgm(String type) async {
-    Map<String, Function> musicManager = {
-      'menu': () async =>
-          await FlameAudio.bgm.play('music/bg_music.mp3', volume: 0.1),
-      'game': () async =>
-          await FlameAudio.bgm.play('music/bg_music.mp3', volume: 0.1),
-      'gameOver': () async =>
-          await FlameAudio.bgm.play('music/bg_music.mp3', volume: 0.1),
-      'levelCompleted': () async =>
-          await FlameAudio.bgm.play('music/bg_music.mp3', volume: 0.1),
-    };
-    try {
-      await FlameAudio.bgm.stop();
-      FlameAudio.bgm.dispose();
-      await musicManager[type]!();
-    } on Exception catch (e) {
-      // print(e);
-    }
   }
 }

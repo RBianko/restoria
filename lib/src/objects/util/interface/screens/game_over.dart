@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:restoria/src/objects/util/providers/bgm_manager.dart';
 import 'package:restoria/src/views/menu/menu.dart';
 
 class GameOver extends StatelessWidget {
-  const GameOver(this.startBgm, {Key? key}) : super(key: key);
-  final Function startBgm;
+  const GameOver({super.key});
+
 
   @override
   Widget build(BuildContext context) {
-    startBgm('gameOver');
+    SoundEffects.startBgm(BgmType.gameOver);
 
     return Center(
       child: Column(

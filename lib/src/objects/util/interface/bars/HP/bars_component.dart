@@ -31,7 +31,9 @@ class BarsComponent extends InterfaceComponent
       _drawLife(canvas);
       _drawMana(canvas);
       // _drawLevel(canvas);
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _drawLife(Canvas canvas) {

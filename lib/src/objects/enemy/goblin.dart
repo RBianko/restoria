@@ -51,11 +51,6 @@ class Goblin extends SimpleEnemy
     removeFromParent();
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-  }
-
 
   void execAttackRange(double damage) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;

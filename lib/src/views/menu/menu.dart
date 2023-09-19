@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:restoria/src/objects/util/providers/bgm_manager.dart';
 import 'package:restoria/src/views/game/game.dart';
 
 class Menu extends StatelessWidget {
@@ -9,6 +10,8 @@ class Menu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SoundEffects.startBgm(BgmType.menu);
+
     if (restart) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _navTo(context, const Game());

@@ -20,38 +20,36 @@ class RespawnManager {
     EnemyType.spider.name: const Duration(seconds: 1),
   };
 
-  static final Map<int, Map<String, int>> _respawnCountByLevel = {
+  static final Map<int, Map<EnemyType, int>> _respawnCountByLevel = {
     1: {
-      EnemyType.goblin.name: 7,
+      EnemyType.goblin: 7,
     },
     2: {
-      EnemyType.goblin.name: 14,
+      EnemyType.goblin: 14,
     },
     3: {
-      EnemyType.goblin.name: 25,
+      EnemyType.goblin: 25,
+    },
+    4: {
+      EnemyType.goblin: 25,
+    },
+    5: {
+      EnemyType.goblin: 25,
+    },
+    6: {
+      EnemyType.goblin: 25,
     },
   };
 
   static _createByType(EnemyType type, Vector2 position) {
-    switch (type) {
-      case EnemyType.goblin:
-        return Goblin(position);
-      case EnemyType.orc:
-        // TODO: Handle this case.
-        break;
-      case EnemyType.skeleton:
-        // TODO: Handle this case.
-        break;
-      case EnemyType.slime:
-        // TODO: Handle this case.
-        break;
-      case EnemyType.bat:
-        // TODO: Handle this case.
-        break;
-      case EnemyType.spider:
-        // TODO: Handle this case.
-        break;
-    }
+    return switch (type) {
+      EnemyType.goblin => Goblin(position),
+      EnemyType.orc => Goblin(position),
+      EnemyType.skeleton => Goblin(position),
+      EnemyType.slime => Goblin(position),
+      EnemyType.bat => Goblin(position),
+      EnemyType.spider => Goblin(position),
+    };
   }
 
   static Duration _getRespawnTime(EnemyType type) {
@@ -61,10 +59,12 @@ class RespawnManager {
   static Vector2 _randomVector() {
     return Vector2(
         Random()
-            .nextInt((((game.size.x - _tileSize) + _tileSize) / _tileSize).floor())
+            .nextInt(
+                (((game.size.x - _tileSize) + _tileSize) / _tileSize).floor())
             .toDouble(),
         Random()
-            .nextInt((((game.size.y - _tileSize) + _tileSize) / _tileSize).floor())
+            .nextInt(
+                (((game.size.y - _tileSize) + _tileSize) / _tileSize).floor())
             .toDouble());
   }
 
@@ -106,27 +106,31 @@ class RespawnManager {
 
   static SimpleEnemy _spawn(EnemyType type) {
     final Vector2 point = _spawnPoint();
-    print('SPAWN: $type: [${point.x}, ${point.y}]');
-    final SimpleEnemy enemy = _createByType(type, Vector2(point.x * _tileSize, point.y * _tileSize));
+    print('_spawn: $type: [${point.x}, ${point.y}]');
+    final SimpleEnemy enemy =
+        _createByType(type, Vector2(point.x * _tileSize, point.y * _tileSize));
 
     return enemy;
   }
 
   static Future spawnEnemiesForLevel(int level) async {
-    _respawnCountByLevel[level]!.forEach((key, value) {
-      _startSpawnByType(EnemyType.values.firstWhere((element) => element.name == key), value);
+    _respawnCountByLevel[level]!.forEach((type, count) {
+      _startSpawnByType(
+          EnemyType.values.firstWhere((enemy) => enemy == type), count);
     });
   }
 
-  static _startSpawnByType(EnemyType type, int enemiesCount) async {
+  static void _startSpawnByType(EnemyType type, int enemiesCount) async {
     int count = enemiesCount;
     int gameHash = game.gameController!.gameRef.hashCode;
 
-    while(count > 0) {
+    while (count > 0) {
       await Future.delayed(_getRespawnTime(type)).then((_) {
         if (gameHash == game.gameController?.gameRef.hashCode) {
-          print('Spawn for: $gameHash: $type: [$count]');
+          print('_startSpawnByType: $gameHash: $type: [$count]');
           game.gameController?.addGameComponent(_spawn(type));
+        } else {
+          return;
         }
       });
       count--;
