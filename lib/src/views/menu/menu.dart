@@ -6,7 +6,12 @@ import 'package:restoria/src/views/game/game.dart';
 class Menu extends StatelessWidget {
   final bool restart;
   final int? nextLevel;
-  const Menu({this.restart = false, this.nextLevel, super.key});
+
+  const Menu({
+    this.restart = false,
+    this.nextLevel,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,43 +35,37 @@ class Menu extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Positioned.fill(
-                  child: Image.asset('assets/images/ui/bg.gif',
-                      fit: BoxFit.fitWidth)),
+                  child: RepaintBoundary(
+                      child: Image.asset('assets/images/ui/bg.gif', fit: BoxFit.fitWidth))),
               Positioned(
-                child: Align(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 20.0),
-                          child: Text(
-                            'The Rest Oria',
-                            style: TextStyle(
-                              fontSize: 55,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black,
-                                  offset: Offset(5, 5),
-                                  blurRadius: 0,
-                                )
-                              ],
-                            ),
-                          ),
+                bottom: 200,
+                left: 0,
+                right: 0,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Text(
+                        'Restoria'.toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 125,
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black,
+                              offset: Offset(15, 15),
+                              blurRadius: 0,
+                            )
+                          ],
                         ),
-                        _buildButton(context, 'Start',
-                                () => _navTo(context, const Game())),
-                        _buildButton(context, 'Settings',
-                                () => _navTo(context, const Menu())),
-                        _buildButton(context, 'Achievements',
-                                () => _navTo(context, const Menu())),
-                        _buildButton(context, 'Skins',
-                                () => _navTo(context, const Menu())),
-                        _buildButton(
-                            context, 'Quit', () => SystemNavigator.pop()),
-                      ],
+                      ),
                     ),
-                  ),
+                    _buildButton(context, 'Start', () => _navTo(context, const Game())),
+                    _buildButton(context, 'Settings', () => _navTo(context, const Menu())),
+                    _buildButton(context, 'Achievements', () => _navTo(context, const Menu())),
+                    _buildButton(context, 'Skins', () => _navTo(context, const Menu())),
+                    _buildButton(context, 'Quit', () => SystemNavigator.pop()),
+                  ],
                 ),
               ),
               const Positioned(
@@ -94,13 +93,14 @@ class Menu extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all(Colors.lightGreen[900]!),
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(0),
+                side: const BorderSide(color: Colors.black, width: 3),
               ),
             ),
           ),
           onPressed: onTap,
           child: Text(
-            label,
+            label.toUpperCase(),
             style: TextStyle(
               fontSize: label == 'Start' ? 40 : 30,
               shadows: const [
@@ -120,7 +120,7 @@ class Menu extends StatelessWidget {
   _navTo(BuildContext context, Widget page) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => page),
-          (Route<dynamic> route) => false,
+      (Route<dynamic> route) => false,
     );
   }
 }

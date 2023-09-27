@@ -5,7 +5,6 @@ import 'package:restoria/src/views/menu/menu.dart';
 class GameOver extends StatelessWidget {
   const GameOver({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     SoundEffects.startBgm(BgmType.gameOver);
@@ -34,8 +33,8 @@ class GameOver extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const Menu(restart: true)),
-                        (Route<dynamic> route) => false,
+                    MaterialPageRoute(builder: (context) => Menu(restart: true)),
+                    (Route<dynamic> route) => false,
                   );
                 },
                 child: const Text(

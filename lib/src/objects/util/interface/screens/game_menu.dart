@@ -39,7 +39,7 @@ class GameMenu extends StatelessWidget {
                     onPressed: () async {
                       await Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const Menu(restart: true)),
+                        MaterialPageRoute(builder: (context) => Menu(restart: true)),
                       );
                     },
                     child: const Text(
@@ -63,8 +63,8 @@ class GameMenu extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => const Menu()),
-                            (Route<dynamic> route) => false,
+                        MaterialPageRoute(builder: (context) => Menu()),
+                        (Route<dynamic> route) => false,
                       );
                     },
                     child: const Text(

@@ -45,8 +45,8 @@ class LevelCompleted extends StatelessWidget {
                       ),
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => const Menu()),
-                              (Route<dynamic> route) => false,
+                          MaterialPageRoute(builder: (context) => Menu()),
+                          (Route<dynamic> route) => false,
                         );
                       },
                       child: const Text(
@@ -70,7 +70,7 @@ class LevelCompleted extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (context) => Menu(nextLevel: level + 1)),
-                              (Route<dynamic> route) => false,
+                          (Route<dynamic> route) => false,
                         );
                       },
                       child: const Text(

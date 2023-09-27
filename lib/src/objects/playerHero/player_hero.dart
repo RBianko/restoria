@@ -202,6 +202,7 @@ class PlayerHero extends SimplePlayer
         size: Vector2.all(MainMap.tileSize),
       ),
     );
+    controller.skills = List.generate(15, (index) => Skill.none());
     super.die();
   }
 }

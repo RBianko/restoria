@@ -1,26 +1,37 @@
+import 'dart:developer';
+
 import 'package:flame_audio/flame_audio.dart';
 
 class SoundEffects {
-  static AudioPlayer player = AudioPlayer();
-  static final bgmAsset = AssetSource('audio/music/bg_music.mp3');
-  static final gameMusicAsset = AssetSource('audio/music/game_music.ogg');
+  static const bgmAsset = 'music/bg_music.mp3';
+  static const gameMusicAsset = 'music/game_music.ogg';
+  static late final List<Uri> assets;
+  static AudioPlayer? player;
 
-  static Future<void> startBgm(BgmType type) async {
-    await player.setReleaseMode(ReleaseMode.release);
+  static Future init() async {
+    FlameAudio.audioCache.prefix = 'assets/audio/';
+    assets = await FlameAudio.audioCache.loadAll([
+      bgmAsset,
+      gameMusicAsset,
+    ]);
+  }
 
+  static startBgm(BgmType type) async {
+    log('SoundEffects: startBgm: $type');
     try {
-      if (player.state == PlayerState.playing) {
-        await player.stop();
-        await player.release();
+      if (player != null && player?.state == PlayerState.playing) {
+        log('SoundEffects: already playing');
+        await player!.stop();
+        await player!.dispose();
       }
-      return switch (type) {
-        BgmType.menu => await player.play(bgmAsset),
-        BgmType.game => await player.play(gameMusicAsset),
-        BgmType.gameOver => await player.play(bgmAsset),
-        BgmType.levelCompleted => await player.play(bgmAsset),
+      player = switch (type) {
+        BgmType.menu => await FlameAudio.loop(bgmAsset, volume: 0.2),
+        BgmType.game => await FlameAudio.loop(gameMusicAsset, volume: 0.2),
+        BgmType.gameOver => await FlameAudio.play(bgmAsset, volume: 0.2),
+        BgmType.levelCompleted => await FlameAudio.play(gameMusicAsset, volume: 0.2),
       };
     } on AudioPlayerException catch (e, st) {
-      print('$st, $e');
+      log('$st, $e');
     }
   }
 }

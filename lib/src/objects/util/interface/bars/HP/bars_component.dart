@@ -1,3 +1,4 @@
+import 'dart:developer' as d;
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
@@ -5,8 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'bars_controller.dart';
 
-class BarsComponent extends InterfaceComponent
-    with UseStateController<BarsController> {
+class BarsComponent extends InterfaceComponent with UseStateController<BarsController> {
   final double padding = 20;
   final double widthBarLife = 172;
   final double widthBarMana = 148;
@@ -32,15 +32,14 @@ class BarsComponent extends InterfaceComponent
       _drawMana(canvas);
       // _drawLevel(canvas);
     } catch (e) {
-      print(e);
+      d.log(e.toString());
     }
   }
 
   void _drawLife(Canvas canvas) {
     double xBar = position.x + xBarOffset;
     double yBar = position.y + yHpBarOffset;
-    double currentBarLife =
-        (controller.life * widthBarLife) / controller.maxLife;
+    double currentBarLife = (controller.life * widthBarLife) / controller.maxLife;
     double currentPercent = controller.life / (controller.maxLife / 100);
 
     canvas.drawLine(
@@ -71,8 +70,7 @@ class BarsComponent extends InterfaceComponent
   void _drawMana(Canvas canvas) {
     double xBar = position.x + xBarOffset;
     double yBar = position.y + yMpBarOffset;
-    double currentBarMana =
-        (controller.stamina * widthBarMana) / controller.maxStamina;
+    double currentBarMana = (controller.stamina * widthBarMana) / controller.maxStamina;
 
     canvas.drawLine(
         Offset(xBar, yBar),

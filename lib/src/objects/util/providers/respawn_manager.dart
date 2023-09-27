@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'dart:developer' as d;
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/npc/enemy/simple_enemy.dart';
 import 'package:restoria/src/objects/enemy/goblin.dart';
 
 import '../../map/map.dart';
@@ -106,7 +106,7 @@ class RespawnManager {
 
   static SimpleEnemy _spawn(EnemyType type) {
     final Vector2 point = _spawnPoint();
-    print('_spawn: $type: [${point.x}, ${point.y}]');
+    d.log('_spawn: $type: [${point.x}, ${point.y}]');
     final SimpleEnemy enemy =
         _createByType(type, Vector2(point.x * _tileSize, point.y * _tileSize));
 
@@ -127,7 +127,7 @@ class RespawnManager {
     while (count > 0) {
       await Future.delayed(_getRespawnTime(type)).then((_) {
         if (gameHash == game.gameController?.gameRef.hashCode) {
-          print('_startSpawnByType: $gameHash: $type: [$count]');
+          d.log('_startSpawnByType: $gameHash: $type: [$count]');
           game.gameController?.addGameComponent(_spawn(type));
         } else {
           return;
