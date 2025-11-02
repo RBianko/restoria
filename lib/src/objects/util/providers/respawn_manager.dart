@@ -1,13 +1,14 @@
-import 'dart:math';
 import 'dart:developer' as d;
+import 'dart:math';
 
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:restoria/src/objects/enemy/goblin.dart';
 
 import '../../map/map.dart';
 
 class RespawnManager {
-  static late BonfireGame game;
+  static late BonfireGameInterface game;
 
   static double get _tileSize => MainMap.tileSize;
 
@@ -59,19 +60,16 @@ class RespawnManager {
   static Vector2 _randomVector() {
     return Vector2(
         Random()
-            .nextInt(
-                (((game.size.x - _tileSize) + _tileSize) / _tileSize).floor())
+            .nextInt((((game.map.size.x - _tileSize) + _tileSize) / _tileSize).floor())
             .toDouble(),
         Random()
-            .nextInt(
-                (((game.size.y - _tileSize) + _tileSize) / _tileSize).floor())
+            .nextInt((((game.map.size.y - _tileSize) + _tileSize) / _tileSize).floor())
             .toDouble());
   }
 
   static List<TileModel> _calculateCollisions() {
-    List<TileModel> collisionTiles = game.map.tiles
-        .where((tile) => tile.collisions?.isNotEmpty ?? false)
-        .toList();
+    List<TileModel> collisionTiles =
+        game.map.tiles.where((tile) => tile.collisions?.isNotEmpty ?? false).toList();
     game.enemies().whereType<SimpleEnemy>().forEach((element) {
       collisionTiles.add(TileModel(
         x: (element.position.x / _tileSize).floor().toDouble(),
@@ -79,7 +77,8 @@ class RespawnManager {
         width: _tileSize,
         height: _tileSize,
         collisions: [
-          CollisionArea.rectangle(size: Vector2(_tileSize, _tileSize))
+          CircleHitbox(radius: _tileSize),
+          // CollisionArea.rectangle(size: Vector2(_tileSize, _tileSize))
         ],
       ));
     });
@@ -91,8 +90,7 @@ class RespawnManager {
     Vector2 point = _randomVector();
     List<TileModel> collisionTiles = _calculateCollisions();
     while (collisionTiles.where((tile) {
-      if ((point.x >= tile.x && point.x <= tile.x) &&
-          (point.y >= tile.y && point.y <= tile.y)) {
+      if ((point.x >= tile.x && point.x <= tile.x) && (point.y >= tile.y && point.y <= tile.y)) {
         return true;
       } else {
         return false;
@@ -115,20 +113,19 @@ class RespawnManager {
 
   static Future spawnEnemiesForLevel(int level) async {
     _respawnCountByLevel[level]!.forEach((type, count) {
-      _startSpawnByType(
-          EnemyType.values.firstWhere((enemy) => enemy == type), count);
+      _startSpawnByType(EnemyType.values.firstWhere((enemy) => enemy == type), count);
     });
   }
 
   static void _startSpawnByType(EnemyType type, int enemiesCount) async {
     int count = enemiesCount;
-    int gameHash = game.gameController!.gameRef.hashCode;
+    int gameHash = int.parse(game.hashCode.toString());
 
     while (count > 0) {
       await Future.delayed(_getRespawnTime(type)).then((_) {
-        if (gameHash == game.gameController?.gameRef.hashCode) {
+        if (gameHash == int.parse(game.hashCode.toString())) {
           d.log('_startSpawnByType: $gameHash: $type: [$count]');
-          game.gameController?.addGameComponent(_spawn(type));
+          game.add(_spawn(type));
         } else {
           return;
         }

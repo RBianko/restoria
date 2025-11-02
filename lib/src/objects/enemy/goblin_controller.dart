@@ -5,17 +5,7 @@ import 'package:restoria/src/objects/map/map.dart';
 
 import 'goblin.dart';
 
-///
-/// Created by
-///
-/// ─▄▀─▄▀
-/// ──▀──▀
-/// █▀▀▀▀▀█▄
-/// █░░░░░█─█
-/// ▀▄▄▄▄▄▀▀
-///
 /// Rafaelbarbosatec
-/// on 03/03/22
 
 class GoblinController extends StateController<Goblin> {
   double attack = 20;
@@ -41,23 +31,6 @@ class GoblinController extends StateController<Goblin> {
         },
         radiusVision: MainMap.tileSize * 20,
       );
-
-      if (!_seePlayerToAttackMelee) {
-        component.seeAndMoveToAttackRange(
-          minDistanceFromPlayer: MainMap.tileSize * 2,
-          positioned: (p) {
-            component.execAttackRange(attack);
-          },
-          radiusVision: MainMap.tileSize * 3,
-          notObserved: () {
-            component.runRandomMovement(
-              dt,
-              speed: component.speed / 2,
-              maxDistance: (MainMap.tileSize * 3).toInt(),
-            );
-          },
-        );
-      }
     }
   }
 }

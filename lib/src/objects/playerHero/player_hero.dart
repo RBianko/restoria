@@ -11,7 +11,7 @@ import 'player_hero_controller.dart';
 enum HeroAttackType { attackMelee, attackRanged }
 
 class PlayerHero extends SimplePlayer
-    with Lighting, ObjectCollision, UseStateController<PlayerHeroController> {
+    with Lighting, UseStateController<PlayerHeroController>, BlockMovementCollision {
   static final double maxSpeed = MainMap.tileSize * 2.5;
 
   double angleRadAttack = 0.0;
@@ -37,39 +37,39 @@ class PlayerHero extends SimplePlayer
         color: Colors.transparent,
       ),
     );
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(width / 5.0, width / 5.0),
-            align: Vector2(
-              width / 2.5,
-              width / 2.5,
-            ),
-          )
-        ],
-      ),
-    );
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: Vector2(width / 5.0, width / 5.0),
+    //         align: Vector2(
+    //           width / 2.5,
+    //           width / 2.5,
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
     if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
       return;
     }
     speed = maxSpeed * event.intensity;
-    super.joystickChangeDirectional(event);
+    super.onJoystickChangeDirectional(event);
   }
 
   @override
-  void joystickAction(JoystickActionEvent event) {
+  void onJoystickAction(JoystickActionEvent event) {
     if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
       return;
     }
     if (hasController) {
       controller.handleJoystickAction(event);
     }
-    super.joystickAction(event);
+    super.onJoystickAction(event);
   }
 
   double getMouseAngle() {
@@ -97,20 +97,21 @@ class PlayerHero extends SimplePlayer
       size: Vector2.all(width * skill.skillStat.size),
       damage: skill.skillStat.damage,
       speed: skill.skillStat.speed,
-      collision: CollisionConfig(
-        enable: false,
-        collisions: [
-          CollisionArea.polygon(
-            points: [
-              Vector2(0, 30),
-              Vector2(5, 15),
-              Vector2(0, 0),
-              Vector2(15, 15),
-            ],
-            align: Vector2(width * 0.3, width * 0.1),
-          )
-        ],
-      ),
+      collision: CircleHitbox(radius: width * skill.skillStat.size),
+      // collision: CollisionConfig(
+      //   enable: false,
+      //   collisions: [
+      //     CollisionArea.polygon(
+      //       points: [
+      //         Vector2(0, 30),
+      //         Vector2(5, 15),
+      //         Vector2(0, 0),
+      //         Vector2(15, 15),
+      //       ],
+      //       align: Vector2(width * 0.3, width * 0.1),
+      //     )
+      //   ],
+      // ),
       destroySize: Vector2(width / 12, width / 12),
       marginFromOrigin: 25,
     );
@@ -161,6 +162,7 @@ class PlayerHero extends SimplePlayer
   @override
   Future<void> onLoad() async {
     spriteDirectionAttack = await Sprite.load('hero/direction_attack.png');
+    add(RectangleHitbox(size: Vector2.all(width / 2)));
     return super.onLoad();
   }
 
@@ -193,7 +195,7 @@ class PlayerHero extends SimplePlayer
   @override
   void die() {
     removeFromParent();
-    gameRef.overlayManager.add('GameOver');
+    gameRef.overlays.add('GameOver');
     gameRef.colorFilter?.animateTo(Colors.red.withOpacity(0.5));
     gameRef.add(
       GameDecoration.withSprite(

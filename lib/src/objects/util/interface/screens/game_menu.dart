@@ -87,7 +87,7 @@ class GameMenu extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      game.overlayManager.remove('GameMenu');
+                      game.overlays.remove('GameMenu');
                     },
                     child: const Text(
                       'Close',

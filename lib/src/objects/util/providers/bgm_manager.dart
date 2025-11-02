@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flame_audio/flame_audio.dart';
 
@@ -10,10 +11,14 @@ class SoundEffects {
 
   static Future init() async {
     FlameAudio.audioCache.prefix = 'assets/audio/';
-    assets = await FlameAudio.audioCache.loadAll([
-      bgmAsset,
-      gameMusicAsset,
-    ]);
+    try {
+      assets = await FlameAudio.audioCache.loadAll([
+        bgmAsset,
+        gameMusicAsset,
+      ]);
+    } on PathAccessException catch (e) {
+      log(e.toString());
+    }
   }
 
   static startBgm(BgmType type) async {
@@ -25,8 +30,8 @@ class SoundEffects {
         await player!.dispose();
       }
       player = switch (type) {
-        BgmType.menu => await FlameAudio.loop(bgmAsset, volume: 0.2),
-        BgmType.game => await FlameAudio.loop(gameMusicAsset, volume: 0.2),
+        BgmType.menu => await FlameAudio.loop(assets[0].path, volume: 0.2),
+        BgmType.game => await FlameAudio.loop(assets[1].path, volume: 0.2),
         BgmType.gameOver => await FlameAudio.play(bgmAsset, volume: 0.2),
         BgmType.levelCompleted => await FlameAudio.play(gameMusicAsset, volume: 0.2),
       };

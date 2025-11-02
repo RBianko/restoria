@@ -16,7 +16,7 @@ void main() async {
   }
   await SoundEffects.init();
   BonfireInjector().put((i) => PlayerHeroController());
-  BonfireInjector().putFactory((i) => GoblinController());
+  BonfireInjector().put((i) => GoblinController());
   BonfireInjector().put((i) => BarsController());
   BonfireInjector().put((i) => HeroMenuController());
 

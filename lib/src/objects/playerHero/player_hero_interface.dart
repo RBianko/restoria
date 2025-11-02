@@ -26,9 +26,7 @@ class PlayerHeroInterface extends GameInterface {
       position: Vector2(350, 30),
       selectable: false,
       onTapComponent: (_) {
-        _showMenu
-            ? gameRef.overlayManager.add('GameMenu')
-            : gameRef.overlayManager.remove('GameMenu');
+        _showMenu ? gameRef.overlays.add('GameMenu') : gameRef.overlays.remove('GameMenu');
         _showMenu = !_showMenu;
       },
     ));

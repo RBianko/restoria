@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:restoria/src/objects/map/map.dart';
 import 'package:restoria/src/objects/playerHero/player_hero.dart';
 import 'package:restoria/src/objects/playerHero/player_hero_interface.dart';
 import 'package:restoria/src/objects/util/interface/bars/HP/bars_ui.dart';
+import 'package:restoria/src/objects/util/interface/bars/meters/fps_meter.dart';
 import 'package:restoria/src/objects/util/interface/menus/hero_menu_ui.dart';
 import 'package:restoria/src/objects/util/interface/screens/game_menu.dart';
 import 'package:restoria/src/objects/util/interface/screens/game_over.dart';
@@ -27,8 +29,7 @@ class Game extends StatefulWidget {
   State<Game> createState() => _GameState();
 }
 
-class _GameState extends State<Game> with GameListener {
-  final GameController _controller = GameController();
+class _GameState extends State<Game> {
   late final PlayerHeroController heroController;
   late int _level;
   late int _gameHash;
@@ -37,7 +38,6 @@ class _GameState extends State<Game> with GameListener {
   void initState() {
     heroController = BonfireInjector().get<PlayerHeroController>();
     _level = widget.level;
-    _controller.addListener(this);
     super.initState();
   }
 
@@ -67,7 +67,7 @@ class _GameState extends State<Game> with GameListener {
             child: Focus(
               onFocusChange: (_) => gameFocus.requestFocus(),
               child: BonfireWidget(
-                gameController: _controller,
+                debugMode: false,
                 showCollisionArea: true, // DebugMode
                 focusNode: gameFocus,
                 joystick: kIsWeb
@@ -152,17 +152,16 @@ class _GameState extends State<Game> with GameListener {
                       ),
                   'HeroMenu': (context, game) => HeroMenu(heroController: heroController),
                   'LevelCompleted': (context, game) => LevelCompleted(_level),
+                  'FpsMeter': (context, game) => FpsMeter(),
                 },
                 initialActiveOverlays: const [
                   'Bars',
                   'MiniMap',
                   'HeroMenu',
+                  'FpsMeter',
                 ],
-                cameraConfig: CameraConfig(
-                  smoothCameraEnabled: true,
-                  smoothCameraSpeed: 2,
-                ),
-                onReady: (BonfireGame game) async => await _onGameStart(game, _controller, _level),
+                progressTransitionDuration: const Duration(milliseconds: 500),
+                onReady: (BonfireGameInterface game) async => await _onGameStart(game, _level),
                 onDispose: () async => await _onGameOver(),
               ),
             ),
@@ -172,20 +171,9 @@ class _GameState extends State<Game> with GameListener {
     );
   }
 
-  @override
-  void changeCountLiveEnemies(int count) {
-    log('changeCountLiveEnemies $count');
-    if (count == 0) {
-      _onLevelCompleted();
-    }
-  }
-
-  @override
-  void updateGame() {}
-
-  Future _onGameStart(BonfireGame game, GameController controller, int level) async {
-    _gameHash = game.gameController!.gameRef.hashCode;
-    game.add(FpsTextComponent(position: Vector2(0, game.size.y - 24)));
+  Future _onGameStart(BonfireGameInterface game, int level) async {
+    _gameHash = game.hashCode;
+    // game.overlays.add('FpsMeter');
 
     log('---------------------------------------------------------');
     log('_onGameStart: $_gameHash');
@@ -199,13 +187,6 @@ class _GameState extends State<Game> with GameListener {
   void _onLevelStart() {
     log('Level $_level Started!');
     RespawnManager.spawnEnemiesForLevel(_level);
-  }
-
-  void _onLevelCompleted() {
-    _controller.gameRef.overlayManager.add('LevelCompleted');
-    log('Level $_level Cleared!');
-
-    _level++;
   }
 
   _onGameOver() async {
